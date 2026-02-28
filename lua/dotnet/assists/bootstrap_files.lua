@@ -20,8 +20,6 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 				local declaration_name = file_name:match("([^.]+)") or "Class1"
 				local is_interface = string.sub(declaration_name, 1, 1) == "I"
 					and string.match(string.sub(declaration_name, 2, 2), "%u")
-				vim.notify(string.sub(declaration_name, 1, 1))
-				vim.notify(string.sub(declaration_name, 2, 2))
 				local declaration_type = is_interface and "interface" or "class"
 
 				local template = {

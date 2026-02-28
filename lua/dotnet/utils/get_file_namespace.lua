@@ -5,8 +5,7 @@ return function(path)
 	-- Table with each part of the path (folders and file)
 	-- ex: ["this", "is", "folders", "class.cs"]
 	local path_parts = vim.split(path, delimiter)
-	vim.notify("path:" .. path)
-
+	--
 	-- Remove the file name from the path
 	-- ex: ["this", "is", "folders"]
 	table.remove(path_parts)
@@ -18,11 +17,8 @@ return function(path)
 	local namespace_parts = {}
 	while not found_project_root do
 		local current_path = table.concat(path_parts, delimiter)
-		vim.notify("c: " .. current_path)
 		local glob_path = #path_parts > 0 and (current_path .. delimiter .. "*.csproj") or "*.csproj"
 		local found = vim.fn.glob(glob_path)
-		vim.notify("g:" .. glob_path)
-		vim.notify("|" .. tostring(found ~= "") .. "|")
 
 		if found ~= "" then
 			found_project_root = true
@@ -42,7 +38,6 @@ return function(path)
 	if found_project_root then
 		namespace = table.concat(namespace_parts, ".")
 	end
-	vim.notify("ns: " .. namespace)
 
 	return namespace
 end
