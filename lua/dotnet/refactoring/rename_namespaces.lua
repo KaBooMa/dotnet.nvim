@@ -71,7 +71,7 @@ return function()
 		local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
 		if confirm_each_file then
 			-- Create a full screen pop up that the user can read the original namespace (in theory) inside
-			local display_win = vim.api.nvim_open_win(bufnr, true, {
+			local display_win = vim.api.nvim_open_win(bufnr, false, {
 				relative = "editor",
 				row = 0,
 				col = 0,
