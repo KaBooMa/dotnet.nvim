@@ -2,6 +2,9 @@
 
 Will become a wrapper for the `dotnet` CLI in Neovim.
 
+**Consider this project a WIP. There will be bugs and there's no promises your project will remain correct.
+  When I feel majority of features I need are implemented and tested, I will remove this warning...**
+
 ## Install
 
 Lazy:
