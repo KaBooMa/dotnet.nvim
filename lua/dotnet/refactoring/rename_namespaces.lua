@@ -92,19 +92,22 @@ return function()
 			end
 		end
 
+		-- Update the namespace line
 		update_count = update_count + 1
 		for i, line in ipairs(lines) do
 			-- Check if the line is a namespace declaration
 			if line:match("^%s*namespace%s+") then
 				local new_line = "namespace " .. update.expected_namespace .. (update.is_file_scoped and ";" or "")
 				lines[i] = new_line
-				vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
-				vim.api.nvim_buf_call(bufnr, function()
-					vim.cmd("write") -- Save buffer after editing
-				end)
 				break
 			end
 		end
+
+		-- Apply changes to the buffer
+		vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
+		vim.api.nvim_buf_call(bufnr, function()
+			vim.cmd("write") -- Save buffer after editing
+		end)
 		::continue::
 	end
 	-- This approach avoids external sed, works on all platforms, and updates the buffer in-place.
