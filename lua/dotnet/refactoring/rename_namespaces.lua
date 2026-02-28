@@ -70,8 +70,23 @@ return function()
 
 		local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
 		if confirm_each_file then
+			-- Create a full screen pop up that the user can read the original namespace (in theory) inside
+			local display_win = vim.api.nvim_open_win(bufnr, true, {
+				relative = "editor",
+				row = 0,
+				col = 0,
+				width = vim.o.columns,
+				height = vim.o.lines,
+				style = "minimal",
+				border = "rounded",
+			})
+
 			local should_replace_lines =
 				vim.fn.confirm("Replace namespace with " .. update.expected_namespace .. "?", "&Yes\n&No", 2)
+
+			-- Close the display pop up
+			vim.api.nvim_win_close(display_win, true)
+
 			if should_replace_lines == 2 then
 				goto continue
 			end
@@ -79,9 +94,9 @@ return function()
 
 		update_count = update_count + 1
 		for i, line in ipairs(lines) do
-			-- Replace all occurrences in each line
-			local new_line = "namespace " .. update.expected_namespace .. (update.is_file_scoped and ";" or "")
-			if line then
+			-- Check if the line is a namespace declaration
+			if line:match("^%s*namespace%s+") then
+				local new_line = "namespace " .. update.expected_namespace .. (update.is_file_scoped and ";" or "")
 				lines[i] = new_line
 				vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
 				vim.api.nvim_buf_call(bufnr, function()
