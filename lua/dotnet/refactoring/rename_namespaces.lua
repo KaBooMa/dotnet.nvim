@@ -68,7 +68,11 @@ return function()
 			goto continue
 		end
 
-		local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+		-- Ensure the buffer is loaded
+		if not vim.api.nvim_buf_is_loaded(bufnr) then
+			vim.fn.bufload(bufnr)
+		end
+
 		if confirm_each_file then
 			-- Create a full screen pop up that the user can read the original namespace (in theory) inside
 			local display_win = vim.api.nvim_open_win(bufnr, false, {
@@ -93,20 +97,18 @@ return function()
 		end
 
 		-- Update the namespace line
-		update_count = update_count + 1
+		local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
 		for i, line in ipairs(lines) do
-			-- Check if the line is a namespace declaration
 			if line:match("^%s*namespace%s+") then
 				local new_line = "namespace " .. update.expected_namespace .. (update.is_file_scoped and ";" or "")
-				lines[i] = new_line
+				vim.api.nvim_buf_set_lines(bufnr, i - 1, i, false, { new_line }) -- Lua is 1-indexed, Neovim API is 0-indexed
+				update_count = update_count + 1
 				break
 			end
 		end
 
-		-- Apply changes to the buffer
-		vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
 		vim.api.nvim_buf_call(bufnr, function()
-			vim.cmd("write") -- Save buffer after editing
+			vim.cmd("write")
 		end)
 		::continue::
 	end
