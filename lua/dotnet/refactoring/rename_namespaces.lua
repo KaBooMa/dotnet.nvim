@@ -59,6 +59,7 @@ return function()
 		return
 	end
 
+	local update_count = 0
 	for _, update in ipairs(need_updated) do
 		-- Read buffer lines
 		local bufnr = vim.fn.bufnr(update.class_path, true)
@@ -76,6 +77,7 @@ return function()
 			end
 		end
 
+		update_count = update_count + 1
 		for i, line in ipairs(lines) do
 			-- Replace all occurrences in each line
 			local new_line = "namespace " .. update.expected_namespace .. (update.is_file_scoped and ";" or "")
@@ -92,5 +94,5 @@ return function()
 	end
 	-- This approach avoids external sed, works on all platforms, and updates the buffer in-place.
 
-	vim.notify("Updated namespace for " .. #need_updated .. " file(s)!")
+	vim.notify("Updated namespace for " .. update_count .. " file(s)!")
 end
