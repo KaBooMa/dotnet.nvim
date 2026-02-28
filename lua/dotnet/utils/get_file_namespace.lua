@@ -22,7 +22,7 @@ return function(path)
 
 		if found ~= "" then
 			found_project_root = true
-			local project_file_name = string.gsub(found, ".csproj", "")
+			local project_file_name = string.match(found, "([%w_]+)%.csproj$")
 			table.insert(namespace_parts, 1, project_file_name)
 			break
 		end
