@@ -28,3 +28,5 @@ Lazy:
   - Interface is determined by `starts with I` and `second character is uppercase` at this time.
   - Class is the fallback pick.
 
+## Known Issues
+- `Dotnet refactor namespaces`: Does not update `using` references yet, just namespaces.
