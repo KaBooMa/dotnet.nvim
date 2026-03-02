@@ -30,3 +30,4 @@ Lazy:
 
 ## Known Issues
 - `Dotnet refactor namespaces`: Does not update `using` references yet, just namespaces.
+  **Update** Testing new code that resolves this. Need to investigate for edge cases.
